@@ -113,8 +113,7 @@ func (a *SUBController) subJsons(c *gin.Context) {
 		c.String(400, "Error!")
 	} else {
 
-		// Add headers
-		c.Writer.Header().Set("Subscription-Userinfo", header)
+		// Add header
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
 		c.Writer.Header().Set("Profile-Title", subId)
 
