@@ -80,7 +80,7 @@ func (a *SUBController) subs(c *gin.Context) {
 		}
 
 		// Add headers
-		c.Writer.Header().Set("Subscription-Userinfo", header)
+		_ = header
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
 		c.Writer.Header().Set("Profile-Title", subId)
 
