@@ -112,7 +112,7 @@ func (a *SUBController) subJsons(c *gin.Context) {
 	if err != nil || len(jsonSub) == 0 {
 		c.String(400, "Error!")
 	} else {
-
+                _ = header
 		// Add header
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
 		c.Writer.Header().Set("Profile-Title", subId)
