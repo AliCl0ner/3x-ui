@@ -32,7 +32,7 @@
 ## Install & Upgrade
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/alicl0ner/3x-ui/master/install.sh)
 ```
 
 ## Install legacy Version (we don't recommend)
@@ -118,7 +118,7 @@ case "${ARCH}" in
 esac
 
 
-wget https://github.com/MHSanaei/3x-ui/releases/latest/download/x-ui-linux-${XUI_ARCH}.tar.gz
+wget https://github.com/Alicl0ner/3x-ui/releases/latest/download/x-ui-linux-${XUI_ARCH}.tar.gz
 ```
 
 2. Once the compressed package is downloaded, execute the following commands to install or upgrade x-ui:
