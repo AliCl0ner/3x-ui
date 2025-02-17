@@ -1209,7 +1209,7 @@ class Inbound extends XrayCommonClass {
 
     //this is used for xtls-rprx-vision
     canEnableTlsFlow() {
-        if (((this.stream.security === 'tls') || (this.stream.security === 'reality')) && (this.network === "tcp")) {
+        if (((this.stream.security === 'tls') || (this.stream.security === 'reality')) && ((this.network === "tcp") || (this.network === "xhttp"))) {
             return this.protocol === Protocols.VLESS;
         }
         return false;
