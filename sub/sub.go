@@ -1,208 +1,133 @@
 package sub
 
 import (
-	"context"
-	"crypto/tls"
-	"io"
+	"encoding/base64"
 	"net"
-	"net/http"
-	"strconv"
-
-	"x-ui/config"
-	"x-ui/logger"
-	"x-ui/util/common"
-	"x-ui/web/middleware"
-	"x-ui/web/network"
-	"x-ui/web/service"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Server struct {
-	httpServer *http.Server
-	listener   net.Listener
+type SUBController struct {
+	subPath        string
+	subJsonPath    string
+	subEncrypt     bool
+	updateInterval string
 
-	sub            *SUBController
-	settingService service.SettingService
-
-	ctx    context.Context
-	cancel context.CancelFunc
+	subService     *SubService
+	subJsonService *SubJsonService
 }
 
-func NewServer() *Server {
-	ctx, cancel := context.WithCancel(context.Background())
-	return &Server{
-		ctx:    ctx,
-		cancel: cancel,
+func NewSUBController(
+	g *gin.RouterGroup,
+	subPath string,
+	jsonPath string,
+	encrypt bool,
+	showInfo bool,
+	rModel string,
+	update string,
+	jsonFragment string,
+	jsonNoise string,
+	jsonMux string,
+	jsonRules string,
+) *SUBController {
+	sub := NewSubService(showInfo, rModel)
+	a := &SUBController{
+		subPath:        subPath,
+		subJsonPath:    jsonPath,
+		subEncrypt:     encrypt,
+		updateInterval: update,
+
+		subService:     sub,
+		subJsonService: NewSubJsonService(jsonFragment, jsonNoise, jsonMux, jsonRules, sub),
 	}
+	a.initRouter(g)
+	return a
 }
 
-func (s *Server) initRouter() (*gin.Engine, error) {
-	if config.IsDebug() {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.DefaultWriter = io.Discard
-		gin.DefaultErrorWriter = io.Discard
-		gin.SetMode(gin.ReleaseMode)
-	}
+func (a *SUBController) initRouter(g *gin.RouterGroup) {
+	gLink := g.Group(a.subPath)
+	gJson := g.Group(a.subJsonPath)
 
-	engine := gin.Default()
+	gLink.GET(":subid", a.subs)
 
-	subDomain, err := s.settingService.GetSubDomain()
-	if err != nil {
-		return nil, err
-	}
-
-	if subDomain != "" {
-		engine.Use(middleware.DomainValidatorMiddleware(subDomain))
-	}
-
-	LinksPath, err := s.settingService.GetSubPath()
-	if err != nil {
-		return nil, err
-	}
-
-	JsonPath, err := s.settingService.GetSubJsonPath()
-	if err != nil {
-		return nil, err
-	}
-
-	Encrypt, err := s.settingService.GetSubEncrypt()
-	if err != nil {
-		return nil, err
-	}
-
-	ShowInfo, err := s.settingService.GetSubShowInfo()
-	if err != nil {
-		return nil, err
-	}
-
-	RemarkModel, err := s.settingService.GetRemarkModel()
-	if err != nil {
-		RemarkModel = "-ieo"
-	}
-
-	SubUpdates, err := s.settingService.GetSubUpdates()
-	if err != nil {
-		SubUpdates = "10"
-	}
-
-	SubJsonFragment, err := s.settingService.GetSubJsonFragment()
-	if err != nil {
-		SubJsonFragment = ""
-	}
-
-	SubJsonNoises, err := s.settingService.GetSubJsonNoises()
-	if err != nil {
-		SubJsonNoises = ""
-	}
-
-	SubJsonMux, err := s.settingService.GetSubJsonMux()
-	if err != nil {
-		SubJsonMux = ""
-	}
-
-	SubJsonRules, err := s.settingService.GetSubJsonRules()
-	if err != nil {
-		SubJsonRules = ""
-	}
-
-	g := engine.Group("/")
-
-	s.sub = NewSUBController(
-		g, LinksPath, JsonPath, Encrypt, ShowInfo, RemarkModel, SubUpdates,
-		SubJsonFragment, SubJsonNoises, SubJsonMux, SubJsonRules)
-
-	return engine, nil
+	gJson.GET(":subid", a.subJsons)
 }
 
-func (s *Server) Start() (err error) {
-	// This is an anonymous function, no function name
-	defer func() {
+func (a *SUBController) subs(c *gin.Context) {
+	subId := c.Param("subid")
+	var host string
+	if h, err := getHostFromXFH(c.GetHeader("X-Forwarded-Host")); err == nil {
+		host = h
+	}
+	if host == "" {
+		host = c.GetHeader("X-Real-IP")
+	}
+	if host == "" {
+		var err error
+		host, _, err = net.SplitHostPort(c.Request.Host)
 		if err != nil {
-			s.Stop()
+			host = c.Request.Host
 		}
-	}()
-
-	subEnable, err := s.settingService.GetSubEnable()
-	if err != nil {
-		return err
 	}
-	if !subEnable {
-		return nil
-	}
-
-	engine, err := s.initRouter()
-	if err != nil {
-		return err
-	}
-
-	certFile, err := s.settingService.GetSubCertFile()
-	if err != nil {
-		return err
-	}
-	keyFile, err := s.settingService.GetSubKeyFile()
-	if err != nil {
-		return err
-	}
-	listen, err := s.settingService.GetSubListen()
-	if err != nil {
-		return err
-	}
-	port, err := s.settingService.GetSubPort()
-	if err != nil {
-		return err
-	}
-
-	listenAddr := net.JoinHostPort(listen, strconv.Itoa(port))
-	listener, err := net.Listen("tcp", listenAddr)
-	if err != nil {
-		return err
-	}
-
-	if certFile != "" || keyFile != "" {
-		cert, err := tls.LoadX509KeyPair(certFile, keyFile)
-		if err == nil {
-			c := &tls.Config{
-				Certificates: []tls.Certificate{cert},
-			}
-			listener = network.NewAutoHttpsListener(listener)
-			listener = tls.NewListener(listener, c)
-			logger.Info("Sub server running HTTPS on", listener.Addr())
-		} else {
-			logger.Error("Error loading certificates:", err)
-			logger.Info("Sub server running HTTP on", listener.Addr())
-		}
+	subs, header, err := a.subService.GetSubs(subId, host)
+	if err != nil || len(subs) == 0 {
+		c.String(400, "Error!")
 	} else {
-		logger.Info("Sub server running HTTP on", listener.Addr())
+		result := ""
+		for _, sub := range subs {
+			result += sub + "\n"
+		}
+
+		// Add headers
+		_ = header
+		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
+		c.Writer.Header().Set("Profile-Title", subId)
+
+		if a.subEncrypt {
+			c.String(200, base64.StdEncoding.EncodeToString([]byte(result)))
+		} else {
+			c.String(200, result)
+		}
 	}
-	s.listener = listener
-
-	s.httpServer = &http.Server{
-		Handler: engine,
-	}
-
-	go func() {
-		s.httpServer.Serve(listener)
-	}()
-
-	return nil
 }
 
-func (s *Server) Stop() error {
-	s.cancel()
+func (a *SUBController) subJsons(c *gin.Context) {
+	subId := c.Param("subid")
+	var host string
+	if h, err := getHostFromXFH(c.GetHeader("X-Forwarded-Host")); err == nil {
+		host = h
+	}
+	if host == "" {
+		host = c.GetHeader("X-Real-IP")
+	}
+	if host == "" {
+		var err error
+		host, _, err = net.SplitHostPort(c.Request.Host)
+		if err != nil {
+			host = c.Request.Host
+		}
+	}
+	jsonSub, header, err := a.subJsonService.GetJson(subId, host)
+	if err != nil || len(jsonSub) == 0 {
+		c.String(400, "Error!")
+	} else {
+                _ = header
+		// Add header
+		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
+		c.Writer.Header().Set("Profile-Title", subId)
 
-	var err1 error
-	var err2 error
-	if s.httpServer != nil {
-		err1 = s.httpServer.Shutdown(s.ctx)
+		c.String(200, jsonSub)
 	}
-	if s.listener != nil {
-		err2 = s.listener.Close()
-	}
-	return common.Combine(err1, err2)
 }
 
-func (s *Server) GetCtx() context.Context {
-	return s.ctx
+func getHostFromXFH(s string) (string, error) {
+	if strings.Contains(s, ":") {
+		realHost, _, err := net.SplitHostPort(s)
+		if err != nil {
+			return "", err
+		}
+		return realHost, nil
+	}
+	return s, nil
 }
