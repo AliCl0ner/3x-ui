@@ -61,6 +61,10 @@
 "secAlertPanelURI" = "Panel varsayılan URI yolu güvensiz. Karmaşık bir URI yolu yapılandırın."
 "secAlertSubURI" = "Abonelik varsayılan URI yolu güvensiz. Karmaşık bir URI yolu yapılandırın."
 "secAlertSubJsonURI" = "Abonelik JSON varsayılan URI yolu güvensiz. Karmaşık bir URI yolu yapılandırın."
+"emptyDnsDesc" = "Eklenmiş DNS sunucusu yok."
+"emptyFakeDnsDesc" = "Eklenmiş Fake DNS sunucusu yok."
+"emptyBalancersDesc" = "Eklenmiş dengeleyici yok."
+"emptyReverseDesc" = "Eklenmiş ters proxy yok."
 
 [menu]
 "dashboard" = "Genel Bakış"
@@ -109,9 +113,10 @@
 "config" = "Yapılandırma"
 "backup" = "Yedekle & Geri Yükle"
 "backupTitle" = "Veritabanı Yedekleme & Geri Yükleme"
-"backupDescription" = "Veritabanını geri yüklemeden önce yedek almanız önerilir."
 "exportDatabase" = "Yedekle"
+"exportDatabaseDesc" = "Mevcut veritabanınızın yedeğini içeren bir .db dosyasını cihazınıza indirmek için tıklayın."
 "importDatabase" = "Geri Yükle"
+"importDatabaseDesc" = "Cihazınızdan bir .db dosyası seçip yükleyerek veritabanınızı yedekten geri yüklemek için tıklayın."
 
 [pages.inbounds]
 "title" = "Gelenler"
@@ -513,9 +518,9 @@
 "status" = "✅ Bot çalışıyor!"
 "usage" = "❗ Lütfen aramak için bir metin sağlayın!"
 "getID" = "🆔 Kimliğiniz: <code>{{ .ID }}</code>"
-"helpAdminCommands" = "Xray Core'u yeniden başlatmak için:\r\n<code>/restart force</code>\r\n\r\nBir müşteri e-postasını aramak için:\r\n<code>/usage [E-posta]</code>\r\n\r\nGelenleri aramak için (müşteri istatistikleri ile):\r\n<code>/inbound [Açıklama]</code>\r\n\r\nTelegram Sohbet Kimliği:\r\n<code>/id</code>"
+"helpAdminCommands" = "Xray Core'u yeniden başlatmak için:\r\n<code>/restart</code>\r\n\r\nBir müşteri e-postasını aramak için:\r\n<code>/usage [E-posta]</code>\r\n\r\nGelenleri aramak için (müşteri istatistikleri ile):\r\n<code>/inbound [Açıklama]</code>\r\n\r\nTelegram Sohbet Kimliği:\r\n<code>/id</code>"
 "helpClientCommands" = "İstatistikleri aramak için şu komutu kullanın:\r\n\r\n<code>/usage [E-posta]</code>\r\n\r\nTelegram Sohbet Kimliği:\r\n<code>/id</code>"
-"restartUsage" = "\r\n\r\n<code>/restart force</code>"
+"restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ İşlem başarılı!"
 "restartFailed" = "❗ İşlem hatası.\r\n\r\n<code>Hata: {{ .Error }}</code>."
 "xrayNotRunning" = "❗ Xray Core çalışmıyor."

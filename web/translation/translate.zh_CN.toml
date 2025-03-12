@@ -61,6 +61,10 @@
 "secAlertPanelURI" = "面板默认 URI 路径不安全。请配置复杂的 URI 路径。"
 "secAlertSubURI" = "订阅默认 URI 路径不安全。请配置复杂的 URI 路径。"
 "secAlertSubJsonURI" = "订阅 JSON 默认 URI 路径不安全。请配置复杂的 URI 路径。"
+"emptyDnsDesc" = "未添加DNS服务器。"
+"emptyFakeDnsDesc" = "未添加Fake DNS服务器。"
+"emptyBalancersDesc" = "未添加负载均衡器。"
+"emptyReverseDesc" = "未添加反向代理。"
 
 [menu]
 "dashboard" = "系统状态"
@@ -109,9 +113,10 @@
 "config" = "配置"
 "backup" = "备份和恢复"
 "backupTitle" = "备份和恢复数据库"
-"backupDescription" = "恢复数据库之前建议进行备份"
 "exportDatabase" = "备份"
+"exportDatabaseDesc" = "点击下载包含当前数据库备份的 .db 文件到您的设备。"
 "importDatabase" = "恢复"
+"importDatabaseDesc" = "点击选择并上传设备中的 .db 文件以从备份恢复数据库。"
 
 [pages.inbounds]
 "title" = "入站列表"
@@ -513,9 +518,9 @@
 "status" = "✅ 机器人正常运行！"
 "usage" = "❗ 请输入要搜索的文本！"
 "getID" = "🆔 您的 ID 为：<code>{{ .ID }}</code>"
-"helpAdminCommands" = "要重新启动 Xray Core：\r\n<code>/restart force</code>\r\n\r\n要搜索客户电子邮件：\r\n<code>/usage [电子邮件]</code>\r\n\r\n要搜索入站（带有客户统计数据）：\r\n<code>/inbound [备注]</code>\r\n\r\nTelegram聊天ID：\r\n<code>/id</code>"
+"helpAdminCommands" = "要重新启动 Xray Core：\r\n<code>/restart</code>\r\n\r\n要搜索客户电子邮件：\r\n<code>/usage [电子邮件]</code>\r\n\r\n要搜索入站（带有客户统计数据）：\r\n<code>/inbound [备注]</code>\r\n\r\nTelegram聊天ID：\r\n<code>/id</code>"
 "helpClientCommands" = "要搜索统计数据，请使用以下命令：\r\n<code>/usage [电子邮件]</code>\r\n\r\nTelegram聊天ID：\r\n<code>/id</code>"
-"restartUsage" = "\r\n\r\n<code>/restart force</code>"
+"restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ 操作成功!"
 "restartFailed" = "❗ 操作错误。\r\n\r\n<code>错误: {{ .Error }}</code>."
 "xrayNotRunning" = "❗ Xray Core 未运行。"

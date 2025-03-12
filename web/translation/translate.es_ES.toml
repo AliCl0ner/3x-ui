@@ -61,6 +61,10 @@
 "secAlertPanelURI" = "La ruta URI predeterminada del panel no es segura. Por favor, configure una ruta URI compleja."
 "secAlertSubURI" = "La ruta URI predeterminada de la suscripción no es segura. Por favor, configure una ruta URI compleja."
 "secAlertSubJsonURI" = "La ruta URI JSON predeterminada de la suscripción no es segura. Por favor, configure una ruta URI compleja."
+"emptyDnsDesc" = "No hay servidores DNS añadidos."
+"emptyFakeDnsDesc" = "No hay servidores Fake DNS añadidos."
+"emptyBalancersDesc" = "No hay balanceadores añadidos."
+"emptyReverseDesc" = "No hay proxies inversos añadidos."
 
 [menu]
 "dashboard" = "Estado del Sistema"
@@ -109,9 +113,10 @@
 "config" = "Configuración"
 "backup" = "Copia de Seguridad y Restauración"
 "backupTitle" = "Copia de Seguridad y Restauración de la Base de Datos"
-"backupDescription" = "Recuerda hacer una copia de seguridad antes de importar una nueva base de datos."
-"exportDatabase" = "Descargar Base de Datos"
-"importDatabase" = "Cargar Base de Datos"
+"exportDatabase" = "Copia de seguridad"
+"exportDatabaseDesc" = "Haz clic para descargar un archivo .db que contiene una copia de seguridad de tu base de datos actual en tu dispositivo."
+"importDatabase" = "Restaurar"
+"importDatabaseDesc" = "Haz clic para seleccionar y cargar un archivo .db desde tu dispositivo para restaurar tu base de datos desde una copia de seguridad."
 
 [pages.inbounds]
 "title" = "Entradas"
@@ -513,9 +518,9 @@
 "status" = "✅ ¡El bot está bien!"
 "usage" = "❗ ¡Por favor proporciona un texto para buscar!"
 "getID" = "🆔 Tu ID: <code>{{ .ID }}</code>"
-"helpAdminCommands" = "Para reiniciar Xray Core:\r\n<code>/restart force</code>\r\n\r\nPara buscar un correo electrónico de cliente:\r\n<code>/usage [Correo electrónico]</code>\r\n\r\nPara buscar entradas (con estadísticas de cliente):\r\n<code>/inbound [Observación]</code>\r\n\r\nID de Chat de Telegram:\r\n<code>/id</code>"
+"helpAdminCommands" = "Para reiniciar Xray Core:\r\n<code>/restart</code>\r\n\r\nPara buscar un correo electrónico de cliente:\r\n<code>/usage [Correo electrónico]</code>\r\n\r\nPara buscar entradas (con estadísticas de cliente):\r\n<code>/inbound [Observación]</code>\r\n\r\nID de Chat de Telegram:\r\n<code>/id</code>"
 "helpClientCommands" = "Para buscar estadísticas, utiliza el siguiente comando:\r\n<code>/usage [Correo electrónico]</code>\r\n\r\nID de Chat de Telegram:\r\n<code>/id</code>"
-"restartUsage" = "\r\n\r\n<code>/restart force</code>"
+"restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ ¡Operación exitosa!"
 "restartFailed" = "❗ Error en la operación.\r\n\r\n<code>Error: {{ .Error }}</code>."
 "xrayNotRunning" = "❗ Xray Core no está en ejecución."

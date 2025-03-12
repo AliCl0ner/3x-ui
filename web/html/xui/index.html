@@ -19,6 +19,18 @@
   .ant-card-dark h2 {
     color: var(--dark-color-text-primary);
   }
+  .ant-backup-list-item {
+    gap: 10px;
+    user-select: none;
+    cursor: pointer;
+  }
+  .dark .ant-backup-list-item svg {
+    color: var(--dark-color-text-primary);
+  }
+  .dark .ant-backup-list, 
+  .dark .ant-xray-version-list {
+    border-color: var(--dark-color-stroke);
+  }
 </style>
 
 <body>
@@ -45,11 +57,11 @@
                         <a-progress type="dashboard" status="normal"
                           :stroke-color="status.cpu.color"
                           :percent="status.cpu.percent"></a-progress>
-                        <div><b>CPU:</b> [[ cpuCoreFormat(status.cpuCores) ]] <a-tooltip>
+                        <div><b>CPU:</b> [[ CPUFormatter.cpuCoreFormat(status.cpuCores) ]] <a-tooltip>
                           <a-icon type="area-chart"></a-icon> 
                           <template slot="title">
                             <div><b>Logical Processors:</b> [[ (status.logicalPro) ]]</div>
-                            <div><b>Speed:</b> [[ cpuSpeedFormat(status.cpuSpeedMhz) ]]</div>
+                            <div><b>Speed:</b> [[ CPUFormatter.cpuSpeedFormat(status.cpuSpeedMhz) ]]</div>
                           </template>
                         </a-tooltip></div>
                       </a-col>
@@ -58,7 +70,7 @@
                           :stroke-color="status.mem.color"
                           :percent="status.mem.percent"></a-progress>
                         <div>
-                          <b>{{ i18n "pages.index.memory"}}:</b> [[ sizeFormat(status.mem.current) ]] / [[ sizeFormat(status.mem.total) ]]
+                          <b>{{ i18n "pages.index.memory"}}:</b> [[ SizeFormatter.sizeFormat(status.mem.current) ]] / [[ SizeFormatter.sizeFormat(status.mem.total) ]]
                         </div>
                       </a-col>
                     </a-row>
@@ -70,7 +82,7 @@
                           :stroke-color="status.swap.color"
                           :percent="status.swap.percent"></a-progress>
                         <div>
-                          <b>Swap:</b> [[ sizeFormat(status.swap.current) ]] / [[ sizeFormat(status.swap.total) ]]
+                          <b>Swap:</b> [[ SizeFormatter.sizeFormat(status.swap.current) ]] / [[ SizeFormatter.sizeFormat(status.swap.total) ]]
                         </div>
                       </a-col>
                       <a-col :span="12" style="text-align: center">
@@ -78,7 +90,7 @@
                           :stroke-color="status.disk.color"
                           :percent="status.disk.percent"></a-progress>
                         <div>
-                          <b>{{ i18n "pages.index.hard"}}:</b> [[ sizeFormat(status.disk.current) ]] / [[ sizeFormat(status.disk.total) ]]
+                          <b>{{ i18n "pages.index.hard"}}:</b> [[ SizeFormatter.sizeFormat(status.disk.current) ]] / [[ SizeFormatter.sizeFormat(status.disk.total) ]]
                         </div>
                       </a-col>
                     </a-row>
@@ -99,8 +111,8 @@
               <a-col :sm="24" :lg="12">
                 <a-card hoverable>
                   <b>{{ i18n "pages.index.operationHours" }}:</b>
-                  <a-tag :color="status.xray.color">Xray: [[ formatSecond(status.appStats.uptime) ]]</a-tag>
-                  <a-tag color="green">OS: [[ formatSecond(status.uptime) ]]</a-tag>
+                  <a-tag :color="status.xray.color">Xray: [[ TimeFormatter.formatSecond(status.appStats.uptime) ]]</a-tag>
+                  <a-tag color="green">OS: [[ TimeFormatter.formatSecond(status.uptime) ]]</a-tag>
                 </a-card>
               </a-col>
               <a-col :sm="24" :lg="12">
@@ -145,7 +157,7 @@
               <a-col :sm="24" :lg="12">
                 <a-card hoverable>
                   <b>{{ i18n "usage"}}:</b>
-                  <a-tag color="green"> RAM: [[ sizeFormat(status.appStats.mem) ]] </a-tag>
+                  <a-tag color="green"> RAM: [[ SizeFormatter.sizeFormat(status.appStats.mem) ]] </a-tag>
                   <a-tag color="green"> Threads: [[ status.appStats.threads ]] </a-tag>
                 </a-card>
               </a-col>
@@ -207,7 +219,7 @@
                     <a-col :span="12">
                       <a-tag>
                         <a-tooltip>
-                          <a-icon type="arrow-up"></a-icon> Up: [[ sizeFormat(status.netIO.up) ]]/s
+                          <a-icon type="arrow-up"></a-icon> Up: [[ SizeFormatter.sizeFormat(status.netIO.up) ]]/s
                           <template slot="title">
                             {{ i18n "pages.index.upSpeed" }}
                           </template>
@@ -217,7 +229,7 @@
                     <a-col :span="12">
                       <a-tag>
                         <a-tooltip>
-                          <a-icon type="arrow-down"></a-icon> Down: [[ sizeFormat(status.netIO.down) ]]/s
+                          <a-icon type="arrow-down"></a-icon> Down: [[ SizeFormatter.sizeFormat(status.netIO.down) ]]/s
                           <template slot="title">
                             {{ i18n "pages.index.downSpeed" }}
                           </template>
@@ -236,7 +248,7 @@
                           <a-icon type="cloud-upload"></a-icon>
                           <template slot="title">
                             {{ i18n "pages.index.totalSent" }}
-                          </template> Out: [[ sizeFormat(status.netTraffic.sent) ]]
+                          </template> Out: [[ SizeFormatter.sizeFormat(status.netTraffic.sent) ]]
                         </a-tooltip>
                       </a-tag>
                     </a-col>
@@ -246,7 +258,7 @@
                           <a-icon type="cloud-download"></a-icon>
                           <template slot="title">
                             {{ i18n "pages.index.totalReceive" }}
-                          </template> In: [[ sizeFormat(status.netTraffic.recv) ]]
+                          </template> In: [[ SizeFormatter.sizeFormat(status.netTraffic.recv) ]]
                         </a-tooltip>
                       </a-tag>
                     </a-col>
@@ -260,14 +272,16 @@
     </a-layout>
     <a-modal id="version-modal" v-model="versionModal.visible" title='{{ i18n "pages.index.xraySwitch" }}' :closable="true"
         @ok="() => versionModal.visible = false" :class="themeSwitcher.currentTheme" footer="">
-      <a-alert type="warning" style="margin-bottom: 12px; width: fit-content"
+      <a-alert type="warning" style="margin-bottom: 12px; width: 100%;"
         message='{{ i18n "pages.index.xraySwitchClickDesk" }}' show-icon></a-alert>
-      <template v-for="version, index in versionModal.versions">
-        <a-tag :color="index % 2 == 0 ? 'purple' : 'green'" style="margin-right: 12px; margin-bottom: 12px"
-          @click="switchV2rayVersion(version)">
-          [[ version ]]
-        </a-tag>
-      </template>
+      <a-list class="ant-xray-version-list" bordered style="width: 100%;">
+        <a-list-item class="ant-xray-version-list-item" v-for="version in versionModal.versions">
+          <a-list-item-meta>
+            <template #title>[[ version ]]</template>
+          </a-list-item-meta>
+          <a-radio :checked="version === `v${status.xray.version}`" @click="switchV2rayVersion(version)"></a-radio>
+        </a-list-item>
+      </a-list>
     </a-modal>
     <a-modal id="log-modal" v-model="logModal.visible"
         :closable="true" @cancel="() => logModal.visible = false"
@@ -314,21 +328,31 @@
       </a-form>
       <div class="ant-input" style="height: auto; max-height: 500px; overflow: auto; margin-top: 0.5rem;" v-html="logModal.formattedLogs"></div>
     </a-modal>
-    <a-modal id="backup-modal" v-model="backupModal.visible" :title="backupModal.title"
-        :closable="true" footer=""
+    <a-modal id="backup-modal" 
+        v-model="backupModal.visible" 
+        title='{{ i18n "pages.index.backupTitle" }}'
+        :closable="true"
+        footer=""
         :class="themeSwitcher.currentTheme">
-      <a-alert type="warning" style="margin-bottom: 10px; width: fit-content"
-        :message="backupModal.description"
-        show-icon>
-      </a-alert>
-      <a-space direction="horizontal" style="text-align: center; margin-bottom: 10px;">
-        <a-button type="primary" @click="exportDatabase()">
-            [[ backupModal.exportText ]]
-        </a-button>
-        <a-button type="primary" @click="importDatabase()">
-            [[ backupModal.importText ]]
-        </a-button>
-      </a-space>
+      <a-list class="ant-backup-list" bordered style="width: 100%;">
+        <a-list-item class="ant-backup-list-item" @click="exportDatabase()">
+          <a-list-item-meta>
+            <template #title>{{ i18n "pages.index.exportDatabase" }}</template>
+            <template #description>{{ i18n "pages.index.exportDatabaseDesc" }}</template>
+          </a-list-item-meta>
+          <a-icon type="right" />
+        </a-list-item>
+        <a-list-item class="ant-backup-list-item" @click="importDatabase()">
+          <a-list-item-meta>
+            <template #title>{{ i18n "pages.index.importDatabase" }}</template>
+            <template #description>{{ i18n "pages.index.importDatabaseDesc" }}</template>
+            <templaet #avatar>
+              <a-icon type="import" />
+            </templaet>
+          </a-list-item-meta>
+          <a-icon type="right" />
+        </a-list-item>
+      </a-list>
     </a-modal>
   </a-layout>
 {{template "js" .}}
@@ -353,7 +377,7 @@
             if (this.total === 0) {
                 return 0;
             }
-            return toFixed(this.current / this.total * 100, 2);
+            return NumberFormatter.toFixed(this.current / this.total * 100, 2);
         }
 
         get color() {
@@ -396,7 +420,7 @@
             this.logicalPro = data.logicalPro;
             this.cpuSpeedMhz = data.cpuSpeedMhz;
             this.disk = new CurTotal(data.disk.current, data.disk.total);
-            this.loads = data.loads.map(load => toFixed(load, 2));
+            this.loads = data.loads.map(load => NumberFormatter.toFixed(load, 2));
             this.mem = new CurTotal(data.mem.current, data.mem.total);
             this.netIO = data.netIO;
             this.netTraffic = data.netTraffic;
@@ -491,24 +515,11 @@
 
     const backupModal = {
         visible: false,
-        title: '',
-        description: '',
-        exportText: '',
-        importText: '',
-        show({
-            title = '{{ i18n "pages.index.backupTitle" }}',
-            description = '{{ i18n "pages.index.backupDescription" }}',
-            exportText = '{{ i18n "pages.index.exportDatabase" }}',
-            importText = '{{ i18n "pages.index.importDatabase" }}',
-        }) {
-            this.title = title;
-            this.description = description;
-            this.exportText = exportText;
-            this.importText = importText;
-            this.visible = true;
+        show() {
+          this.visible = true;
         },
         hide() {
-            this.visible = false;
+          this.visible = false;
         },
     };
 
@@ -604,12 +615,7 @@
                 txtModal.show('config.json', JSON.stringify(msg.obj, null, 2), 'config.json');
             },
             openBackup() {
-                backupModal.show({
-                    title: '{{ i18n "pages.index.backupTitle" }}',
-                    description: '{{ i18n "pages.index.backupDescription" }}',
-                    exportText: '{{ i18n "pages.index.exportDatabase" }}',
-                    importText: '{{ i18n "pages.index.importDatabase" }}',
-                });
+              backupModal.show();
             },
             exportDatabase() {
                 window.location = basePath + 'server/getDb';

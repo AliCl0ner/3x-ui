@@ -61,6 +61,10 @@
 "secAlertPanelURI" = "デフォルトのURIパスは安全ではありません。複雑なURIパスを設定してください。"
 "secAlertSubURI" = "サブスクリプションのデフォルトURIパスは安全ではありません。複雑なURIパスを設定してください。"
 "secAlertSubJsonURI" = "JSONサブスクリプションのデフォルトURIパスは安全ではありません。複雑なURIパスを設定してください。"
+"emptyDnsDesc" = "追加されたDNSサーバーはありません。"
+"emptyFakeDnsDesc" = "追加されたFake DNSサーバーはありません。"
+"emptyBalancersDesc" = "追加されたバランサーはありません。"
+"emptyReverseDesc" = "追加されたリバースプロキシはありません。"
 
 [menu]
 "dashboard" = "ダッシュボード"
@@ -109,9 +113,10 @@
 "config" = "設定"
 "backup" = "バックアップと復元"
 "backupTitle" = "データベースのバックアップと復元"
-"backupDescription" = "データベースを復元する前にバックアップすることをお勧めします"
 "exportDatabase" = "バックアップ"
+"exportDatabaseDesc" = "クリックして、現在のデータベースのバックアップを含む .db ファイルをデバイスにダウンロードします。"
 "importDatabase" = "復元"
+"importDatabaseDesc" = "クリックして、デバイスから .db ファイルを選択し、アップロードしてバックアップからデータベースを復元します。"
 
 [pages.inbounds]
 "title" = "インバウンド一覧"
@@ -513,9 +518,9 @@
 "status" = "✅ ボットは正常に動作しています！"
 "usage" = "❗ 検索するテキストを入力してください！"
 "getID" = "🆔 あなたのIDは：<code>{{ .ID }}</code>"
-"helpAdminCommands" = "Xray Coreを再起動するには：\r\n<code>/restart force</code>\r\n\r\nクライアントの電子メールを検索するには：\r\n<code>/usage [電子メール]</code>\r\n\r\nインバウンド（クライアントの統計情報を含む）を検索するには：\r\n<code>/inbound [備考]</code>\r\n\r\nTelegramチャットID：\r\n<code>/id</code>"
+"helpAdminCommands" = "Xray Coreを再起動するには：\r\n<code>/restart</code>\r\n\r\nクライアントの電子メールを検索するには：\r\n<code>/usage [電子メール]</code>\r\n\r\nインバウンド（クライアントの統計情報を含む）を検索するには：\r\n<code>/inbound [備考]</code>\r\n\r\nTelegramチャットID：\r\n<code>/id</code>"
 "helpClientCommands" = "統計情報を検索するには、次のコマンドを使用してください：\r\n<code>/usage [電子メール]</code>\r\n\r\nTelegramチャットID：\r\n<code>/id</code>"
-"restartUsage" = "\r\n\r\n<code>/restart force</code>"
+"restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ 操作成功！"
 "restartFailed" = "❗ 操作エラー。\r\n\r\n<code>エラー: {{ .Error }}</code>"
 "xrayNotRunning" = "❗ Xray Core は動作していません。"

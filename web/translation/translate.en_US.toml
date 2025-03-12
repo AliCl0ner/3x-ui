@@ -61,6 +61,10 @@
 "secAlertPanelURI" = "Panel default URI path is insecure. Please configure a complex URI path."
 "secAlertSubURI" = "Subscription default URI path is insecure. Please configure a complex URI path."
 "secAlertSubJsonURI" = "Subscription JSON default URI path is insecure. Please configure a complex URI path."
+"emptyDnsDesc" = "No added DNS servers."
+"emptyFakeDnsDesc" = "No added Fake DNS servers."
+"emptyBalancersDesc" = "No added balancers."
+"emptyReverseDesc" = "No added reverse proxies."
 
 [menu]
 "dashboard" = "Overview"
@@ -109,9 +113,10 @@
 "config" = "Config"
 "backup" = "Backup & Restore"
 "backupTitle" = "Database Backup & Restore"
-"backupDescription" = "It is recommended to make a backup before restoring a database."
 "exportDatabase" = "Back Up"
+"exportDatabaseDesc" = "Click to download a .db file containing a backup of your current database to your device."
 "importDatabase" = "Restore"
+"importDatabaseDesc" = "Click to select and upload a .db file from your device to restore your database from a backup."
 
 [pages.inbounds]
 "title" = "Inbounds"
@@ -513,9 +518,9 @@
 "status" = "✅ Bot is OK!"
 "usage" = "❗ Please provide a text to search!"
 "getID" = "🆔 Your ID: <code>{{ .ID }}</code>"
-"helpAdminCommands" = "To restart Xray Core:\r\n<code>/restart force</code>\r\n\r\nTo search for a client email:\r\n<code>/usage [Email]</code>\r\n\r\nTo search for inbounds (with client stats):\r\n<code>/inbound [Remark]</code>\r\n\r\nTelegram Chat ID:\r\n<code>/id</code>"
+"helpAdminCommands" = "To restart Xray Core:\r\n<code>/restart</code>\r\n\r\nTo search for a client email:\r\n<code>/usage [Email]</code>\r\n\r\nTo search for inbounds (with client stats):\r\n<code>/inbound [Remark]</code>\r\n\r\nTelegram Chat ID:\r\n<code>/id</code>"
 "helpClientCommands" = "To search for statistics, use the following command:\r\n\r\n<code>/usage [Email]</code>\r\n\r\nTelegram Chat ID:\r\n<code>/id</code>"
-"restartUsage" = "\r\n\r\n<code>/restart force</code>"
+"restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ Operation successful!"
 "restartFailed" = "❗ Error in operation.\r\n\r\n<code>Error: {{ .Error }}</code>."
 "xrayNotRunning" = "❗ Xray Core is not running."

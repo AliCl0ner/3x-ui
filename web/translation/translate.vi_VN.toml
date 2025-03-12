@@ -61,6 +61,10 @@
 "secAlertPanelURI" = "Đường dẫn URI mặc định của bảng điều khiển không an toàn. Vui lòng cấu hình một đường dẫn URI phức tạp."
 "secAlertSubURI" = "Đường dẫn URI mặc định của đăng ký không an toàn. Vui lòng cấu hình một đường dẫn URI phức tạp."
 "secAlertSubJsonURI" = "Đường dẫn URI JSON mặc định của đăng ký không an toàn. Vui lòng cấu hình một đường dẫn URI phức tạp."
+"emptyDnsDesc" = "Không có máy chủ DNS nào được thêm."
+"emptyFakeDnsDesc" = "Không có máy chủ Fake DNS nào được thêm."
+"emptyBalancersDesc" = "Không có bộ cân bằng tải nào được thêm."
+"emptyReverseDesc" = "Không có proxy ngược nào được thêm."
 
 [menu]
 "dashboard" = "Trạng thái hệ thống"
@@ -109,9 +113,10 @@
 "config" = "Cấu hình"
 "backup" = "Sao lưu & Khôi phục"
 "backupTitle" = "Sao lưu & Khôi phục Cơ sở dữ liệu"
-"backupDescription" = "Hãy nhớ sao lưu trước khi nhập cơ sở dữ liệu mới."
-"exportDatabase" = "Tải về Cơ sở dữ liệu"
-"importDatabase" = "Tải lên Cơ sở dữ liệu"
+"exportDatabase" = "Sao lưu"
+"exportDatabaseDesc" = "Nhấp để tải xuống tệp .db chứa bản sao lưu cơ sở dữ liệu hiện tại của bạn vào thiết bị."
+"importDatabase" = "Khôi phục"
+"importDatabaseDesc" = "Nhấp để chọn và tải lên tệp .db từ thiết bị của bạn để khôi phục cơ sở dữ liệu từ bản sao lưu."
 
 [pages.inbounds]
 "title" = "Điểm vào (Inbounds)"
@@ -513,9 +518,9 @@
 "status" = "✅ Bot hoạt động bình thường!"
 "usage" = "❗ Vui lòng cung cấp văn bản để tìm kiếm!"
 "getID" = "🆔 ID của bạn: <code>{{ .ID }}</code>"
-"helpAdminCommands" = "Để khởi động lại Xray Core:\r\n<code>/restart force</code>\r\n\r\nĐể tìm kiếm email của khách hàng:\r\n<code>/usage [Email]</code>\r\n\r\nĐể tìm kiếm các nhập (với số liệu thống kê của khách hàng):\r\n<code>/inbound [Ghi chú]</code>\r\n\r\nID Trò chuyện Telegram:\r\n<code>/id</code>"
+"helpAdminCommands" = "Để khởi động lại Xray Core:\r\n<code>/restart</code>\r\n\r\nĐể tìm kiếm email của khách hàng:\r\n<code>/usage [Email]</code>\r\n\r\nĐể tìm kiếm các nhập (với số liệu thống kê của khách hàng):\r\n<code>/inbound [Ghi chú]</code>\r\n\r\nID Trò chuyện Telegram:\r\n<code>/id</code>"
 "helpClientCommands" = "Để tìm kiếm thống kê, sử dụng lệnh sau:\r\n<code>/usage [Email]</code>\r\n\r\nID Trò chuyện Telegram:\r\n<code>/id</code>"
-"restartUsage" = "\r\n\r\n<code>/restart force</code>"
+"restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ Hoạt động thành công!"
 "restartFailed" = "❗ Lỗi trong quá trình hoạt động.\r\n\r\n<code>Lỗi: {{ .Error }}</code>."
 "xrayNotRunning" = "❗ Xray Core không chạy."

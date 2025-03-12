@@ -80,66 +80,68 @@ class PromiseUtil {
     }
 }
 
-const seq = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-
 class RandomUtil {
-    static randomIntRange(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
-    }
-
-    static randomInt(n) {
-        return this.randomIntRange(0, n);
-    }
-
-    static randomSeq(count) {
-        let str = '';
-        for (let i = 0; i < count; ++i) {
-            str += seq[this.randomInt(62)];
+    static getSeq({ type = "default", hasNumbers = true, hasLowercase = true, hasUppercase = true } = {}) {
+        let seq = '';
+        
+        switch (type) {
+            case "hex":
+                seq += "0123456789abcdef";
+                break;
+            default:
+                if (hasNumbers) seq += "0123456789";
+                if (hasLowercase) seq += "abcdefghijklmnopqrstuvwxyz";
+                if (hasUppercase) seq += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                break;
         }
-        return str;
+
+        return seq;
+    }
+
+    static randomInteger(min, max) {
+        const range = max - min + 1;
+        const randomBuffer = new Uint32Array(1);
+        window.crypto.getRandomValues(randomBuffer);
+        return Math.floor((randomBuffer[0] / (0xFFFFFFFF + 1)) * range) + min;
+    }
+
+    static randomSeq(count, options = {}) {
+        const seq = this.getSeq(options);
+        const seqLength = seq.length;
+        const randomValues = new Uint32Array(count);
+        window.crypto.getRandomValues(randomValues);
+        return Array.from(randomValues, v => seq[v % seqLength]).join('');
     }
 
     static randomShortIds() {
-        const lengths = [2, 4, 6, 8, 10, 12, 14, 16];
-        for (let i = lengths.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [lengths[i], lengths[j]] = [lengths[j], lengths[i]];
-        }
+        const lengths = [2, 4, 6, 8, 10, 12, 14, 16].sort(() => Math.random() - 0.5);
 
-        let shortIds = [];
-        for (let length of lengths) {
-            let shortId = '';
-            for (let i = 0; i < length; i++) {
-                shortId += seq[this.randomInt(16)];
-            }
-            shortIds.push(shortId);
-        }
-        return shortIds.join(',');
+        return lengths.map(len => this.randomSeq(len, { type: "hex" })).join(',');
     }
 
     static randomLowerAndNum(len) {
-        let str = '';
-        for (let i = 0; i < len; ++i) {
-            str += seq[this.randomInt(36)];
-        }
-        return str;
+        return this.randomSeq(len, { hasUppercase: false });
     }
 
     static randomUUID() {
-        const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
-        return template.replace(/[xy]/g, function (c) {
-            const randomValues = new Uint8Array(1);
-            crypto.getRandomValues(randomValues);
-            let randomValue = randomValues[0] % 16;
-            let calculatedValue = (c === 'x') ? randomValue : (randomValue & 0x3 | 0x8);
-            return calculatedValue.toString(16);
-        });
+        if (window.location.protocol === "https:") {
+            return window.crypto.randomUUID();
+        } else {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+                .replace(/[xy]/g, function (c) {
+                    const randomValues = new Uint8Array(1);
+                    window.crypto.getRandomValues(randomValues);
+                    let randomValue = randomValues[0] % 16;
+                    let calculatedValue = (c === 'x') ? randomValue : (randomValue & 0x3 | 0x8);
+                    return calculatedValue.toString(16);
+                });
+        }
     }
 
     static randomShadowsocksPassword() {
-        let array = new Uint8Array(32);
+        const array = new Uint8Array(32);
         window.crypto.getRandomValues(array);
-        return btoa(String.fromCharCode.apply(null, array));
+        return Base64.encode(String.fromCharCode(...array));
     }
 }
 
@@ -478,4 +480,304 @@ class Wireguard {
             privateKey: secretKey.length > 0 ? secretKey : this.keyToBase64(privateKey)
         };
     }
+}
+
+class ClipboardManager {
+    static copyText(content = "") {
+        // !! here old way of copying is used because not everyone can afford https connection
+        return new Promise((resolve) => {
+            try {
+                const textarea = window.document.createElement('textarea');
+    
+                textarea.style.fontSize = '12pt';
+                textarea.style.border = '0';
+                textarea.style.padding = '0';
+                textarea.style.margin = '0';
+                textarea.style.position = 'absolute';
+                textarea.style.left = '-9999px';
+                textarea.style.top = `${window.pageYOffset || document.documentElement.scrollTop}px`;
+                textarea.setAttribute('readonly', '');
+                textarea.value = content;
+    
+                window.document.body.appendChild(textarea);
+    
+                textarea.select();
+                window.document.execCommand("copy");
+    
+                window.document.body.removeChild(textarea);
+    
+                resolve(true)
+            } catch {
+                resolve(false)
+            }
+        })
+    }
+}
+
+class Base64 {
+    static encode(content = "", safe = false) {
+        if (safe) {
+            return Base64.encode(content)
+                .replace(/\+/g, '-')
+                .replace(/=/g, '')
+                .replace(/\//g, '_')
+        }
+
+        return window.btoa(
+            String.fromCharCode(...new TextEncoder().encode(content))
+        )
+    }
+
+    static decode(content = "") {
+        return new TextDecoder()
+            .decode(
+                Uint8Array.from(window.atob(content), c => c.charCodeAt(0))
+            )
+    }
+}
+
+class SizeFormatter {
+    static ONE_KB = 1024;
+    static ONE_MB = this.ONE_KB * 1024;
+    static ONE_GB = this.ONE_MB * 1024;
+    static ONE_TB = this.ONE_GB * 1024;
+    static ONE_PB = this.ONE_TB * 1024;
+
+    static sizeFormat(size) {
+        if (size <= 0) return "0 B";
+        if (size < this.ONE_KB) return size.toFixed(0) + " B";
+        if (size < this.ONE_MB) return (size / this.ONE_KB).toFixed(2) + " KB";
+        if (size < this.ONE_GB) return (size / this.ONE_MB).toFixed(2) + " MB";
+        if (size < this.ONE_TB) return (size / this.ONE_GB).toFixed(2) + " GB";
+        if (size < this.ONE_PB) return (size / this.ONE_TB).toFixed(2) + " TB";
+        return (size / this.ONE_PB).toFixed(2) + " PB";
+    }
+}
+
+class CPUFormatter {
+    static cpuSpeedFormat(speed) {
+        return speed > 1000 ? (speed / 1000).toFixed(2) + " GHz" : speed.toFixed(2) + " MHz";
+    }
+    
+    static cpuCoreFormat(cores) {
+        return cores === 1 ? "1 Core" : cores + " Cores";
+    }
+}
+
+class TimeFormatter {
+    static formatSecond(second) {
+        if (second < 60) return second.toFixed(0) + 's';
+        if (second < 3600) return (second / 60).toFixed(0) + 'm';
+        if (second < 3600 * 24) return (second / 3600).toFixed(0) + 'h';
+        let day = Math.floor(second / 3600 / 24);
+        let remain = ((second / 3600) - (day * 24)).toFixed(0);
+        return day + 'd' + (remain > 0 ? ' ' + remain + 'h' : '');
+    }
+}
+
+class NumberFormatter {
+    static addZero(num) {
+        return num < 10 ? "0" + num : num;
+    }
+    
+    static toFixed(num, n) {
+        n = Math.pow(10, n);
+        return Math.floor(num * n) / n;
+    }
+}
+
+class Utils {
+    static debounce(fn, delay) {
+        let timeoutID = null;
+        return function () {
+            clearTimeout(timeoutID);
+            let args = arguments;
+            let that = this;
+            timeoutID = setTimeout(() => fn.apply(that, args), delay);
+        };
+    }
+}
+
+class CookieManager {
+    static getCookie(cname) {
+        let name = cname + '=';
+        let ca = document.cookie.split(';');
+        for (let c of ca) {
+            c = c.trim();
+            if (c.indexOf(name) === 0) {
+                return decodeURIComponent(c.substring(name.length, c.length));
+            }
+        }
+        return '';
+    }
+    
+    static setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+        let expires = 'expires=' + d.toUTCString();
+        document.cookie = cname + '=' + encodeURIComponent(cvalue) + ';' + expires + ';path=/';
+    }
+}
+
+class ColorUtils {
+    static usageColor(data, threshold, total) {
+        switch (true) {
+            case data === null: return "purple";
+            case total < 0: return "green";
+            case total == 0: return "purple";
+            case data < total - threshold: return "green";
+            case data < total: return "orange";
+            default: return "red";
+        }
+    }
+    
+    static clientUsageColor(clientStats, trafficDiff) {
+        switch (true) {
+            case !clientStats || clientStats.total == 0: return "#7a316f";
+            case clientStats.up + clientStats.down < clientStats.total - trafficDiff: return "#008771";
+            case clientStats.up + clientStats.down < clientStats.total: return "#f37b24";
+            default: return "#cf3c3c";
+        }
+    }
+    
+    static userExpiryColor(threshold, client, isDark = false) {
+        if (!client.enable) return isDark ? '#2c3950' : '#bcbcbc';
+        let now = new Date().getTime(), expiry = client.expiryTime;
+        switch (true) {
+            case expiry === null: return "#7a316f";
+            case expiry < 0: return "#008771";
+            case expiry == 0: return "#7a316f";
+            case now < expiry - threshold: return "#008771";
+            case now < expiry: return "#f37b24";
+            default: return "#cf3c3c";
+        }
+    }
+}
+
+class ArrayUtils {
+    static doAllItemsExist(array1, array2) {
+        return array1.every(item => array2.includes(item));
+    }
+}
+
+class URLBuilder {
+    static buildURL({ host, port, isTLS, base, path }) {
+        if (!host || host.length === 0) host = window.location.hostname;
+        if (!port || port.length === 0) port = window.location.port;
+        if (isTLS === undefined) isTLS = window.location.protocol === "https:";
+        
+        const protocol = isTLS ? "https:" : "http:";
+        port = String(port);
+        if (port === "" || (isTLS && port === "443") || (!isTLS && port === "80")) {
+            port = "";
+        } else {
+            port = `:${port}`;
+        }
+        
+        return `${protocol}//${host}${port}${base}${path}`;
+    }
+}
+
+class LanguageManager {
+    static supportedLanguages = [
+        {
+            name: "English",
+            value: "en-US",
+            icon: "🇺🇸",
+        },
+        {
+            name: "فارسی",
+            value: "fa-IR",
+            icon: "🇮🇷",
+        },
+        {
+            name: "简体中文",
+            value: "zh-CN",
+            icon: "🇨🇳",
+        },
+        {
+            name: "繁體中文",
+            value: "zh-TW",
+            icon: "🇹🇼",
+        },
+        {
+            name: "日本語",
+            value: "ja-JP",
+            icon: "🇯🇵",
+        },
+        {
+            name: "Русский",
+            value: "ru-RU",
+            icon: "🇷🇺",
+        },
+        {
+            name: "Tiếng Việt",
+            value: "vi-VN",
+            icon: "🇻🇳",
+        },
+        {
+            name: "Español",
+            value: "es-ES",
+            icon: "🇪🇸",
+        },
+        {
+            name: "Indonesian",
+            value: "id-ID",
+            icon: "🇮🇩",
+        },
+        {
+            name: "Український",
+            value: "uk-UA",
+            icon: "🇺🇦",
+        },
+        {
+            name: "Türkçe",
+            value: "tr-TR",
+            icon: "🇹🇷",
+        },
+        {
+            name: "Português",
+            value: "pt-BR",
+            icon: "🇧🇷",
+        }
+    ]
+
+    static getLanguage() {
+        let lang = CookieManager.getCookie("lang");
+    
+        if (!lang) {
+            if (window.navigator) {
+                lang = window.navigator.language || window.navigator.userLanguage;
+    
+                if (LanguageManager.isSupportLanguage(lang)) {
+                    CookieManager.setCookie("lang", lang, 150);
+                } else {
+                    CookieManager.setCookie("lang", "en-US", 150);
+                    window.location.reload();
+                }
+            } else {
+                CookieManager.setCookie("lang", "en-US", 150);
+                window.location.reload();
+            }
+        }
+    
+        return lang;
+    }
+    
+    static setLanguage(language) {
+        if (!LanguageManager.isSupportLanguage(language)) {
+            language = "en-US";
+        }
+    
+        CookieManager.setCookie("lang", language, 150);
+        window.location.reload();
+    }
+    
+    static isSupportLanguage(language) {
+        const languageFilter = LanguageManager.supportedLanguages.filter((lang) => {
+            return lang.value === language
+        })
+    
+        return languageFilter.length > 0;
+    }    
 }
