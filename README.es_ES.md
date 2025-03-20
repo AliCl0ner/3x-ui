@@ -244,8 +244,8 @@ location /sub {
 
 ## SO Recomendados
 
-- Ubuntu 20.04+
-- Debian 11+
+- Ubuntu 22.04+
+- Debian 12+
 - CentOS 8+
 - OpenEuler 22.03+
 - Fedora 36+
@@ -258,6 +258,7 @@ location /sub {
 - Oracle Linux 8+
 - OpenSUSE Tubleweed
 - Amazon Linux 2023
+- Virtuozzo Linux 8+
 - Windows x64
 
 ## Arquitecturas y Dispositivos Compatibles

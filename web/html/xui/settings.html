@@ -377,7 +377,7 @@
                       <template #title>{{ i18n "pages.settings.tgNotifyCpu" }}</template>
                       <template #description>{{ i18n "pages.settings.tgNotifyCpuDesc" }}</template>
                       <template #control>
-                        <a-input-number :min="0" :min="100" v-model="allSetting.tgCpu"></a-switch>
+                        <a-input-number :min="0" :min="100" v-model="allSetting.tgCpu" style="width: 100%;"></a-switch>
                       </template>
                     </a-setting-list-item>
                   </a-collapse-panel>
@@ -407,6 +407,13 @@
                       <template #description>{{ i18n "pages.settings.subEnableDesc"}}</template>
                       <template #control>
                         <a-switch v-model="allSetting.subEnable"></a-switch>
+                      </template>
+                    </a-setting-list-item>
+                    <a-setting-list-item paddings="small">
+                      <template #title>{{ i18n "pages.settings.subTitle"}}</template>
+                      <template #description>{{ i18n "pages.settings.subTitleDesc"}}</template>
+                      <template #control>
+                        <a-input type="text" v-model="allSetting.subTitle"></a-input>
                       </template>
                     </a-setting-list-item>
                     <a-setting-list-item paddings="small">
@@ -656,9 +663,9 @@
   </a-layout>
 {{template "js" .}}
 <script src="{{ .base_path }}assets/js/model/setting.js?{{ .cur_ver }}"></script>
-{{template "component/themeSwitcher" .}}
-{{template "component/password" .}}
-{{template "component/setting"}}
+{{template "component/aThemeSwitch" .}}
+{{template "component/aPasswordInput" .}}
+{{template "component/aSettingListItem" .}}
 <script>
   const app = new Vue({
     delimiters: ['[[', ']]'],
