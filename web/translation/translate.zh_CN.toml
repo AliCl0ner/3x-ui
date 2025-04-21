@@ -29,6 +29,7 @@
 "copySuccess" = "复制成功"
 "sure" = "确定"
 "encryption" = "加密"
+"useIPv4ForHost" = "使用 IPv4 连接主机"
 "transmission" = "传输"
 "host" = "主机"
 "path" = "路径"
@@ -645,7 +646,8 @@
 "allClients" = "所有客户"
 
 "addClient" = "添加客户"
-"submitDisable" = "提交为禁用 ✅"
+"submitDisable" = "提交为禁用 ☑️"
+"submitEnable" = "提交为启用 ✅"
 "use_default" = "🏷️ 使用默认"
 "change_id" = "⚙️🔑 ID"
 "change_password" = "⚙️🔑 密码"

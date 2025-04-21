@@ -1,4 +1,4 @@
-[English](/README.md) | [فارسی](/README.fa_IR.md) | [中文](/README.zh_CN.md) | [Español](/README.es_ES.md) | [Русский](/README.ru_RU.md)
+[English](/README.md) | [فارسی](/README.fa_IR.md) | [العربية](/README.ar_EG.md) |  [中文](/README.zh_CN.md) | [Español](/README.es_ES.md) | [Русский](/README.ru_RU.md)
 
 <p align="center">
   <picture>
@@ -40,7 +40,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 Чтобы установить желаемую версию, используйте следующую команду установки. Например, ver `v1.7.9`:
 
 ```
-VERSION=v1.7.9 && <(curl -Ls "https://raw.githubusercontent.com/mhsanaei/3x-ui/$VERSION/install.sh") $VERSION
+VERSION=v1.7.9 && bash <(curl -Ls "https://raw.githubusercontent.com/mhsanaei/3x-ui/$VERSION/install.sh") $VERSION
 ```
 
 ## SSL Сертификат
@@ -289,6 +289,7 @@ location /sub {
 
 ## Языки
 
+- Arabic (арабский)
 - English (английский)  
 - Persian (персидский)  
 - Traditional Chinese (традиционный китайский)  

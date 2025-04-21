@@ -29,6 +29,7 @@
 "copySuccess" = "コピー成功"
 "sure" = "確定"
 "encryption" = "暗号化"
+"useIPv4ForHost" = "ホストにIPv4を使用"
 "transmission" = "伝送"
 "host" = "ホスト"
 "path" = "パス"
@@ -645,13 +646,13 @@
 "allClients" = "すべてのクライアント"
 
 "addClient" = "クライアントを追加"
-"submitDisable" = "無効として送信 ✅"
+"submitDisable" = "無効として送信 ☑️"
+"submitEnable" = "有効として送信 ✅"
 "use_default" = "🏷️ デフォルトを使用"
 "change_id" = "⚙️🔑 ID"
 "change_password" = "⚙️🔑 パスワード"
-"change_email" = "⚙️📧 メール"
+"change_email" = "⚙️📧 メールアドレス"
 "change_comment" = "⚙️💬 コメント"
-
 
 [tgbot.answers]
 "successfulOperation" = "✅ 成功！"

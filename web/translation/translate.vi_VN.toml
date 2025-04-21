@@ -29,6 +29,7 @@
 "copySuccess" = "Đã sao chép thành công"
 "sure" = "Chắc chắn"
 "encryption" = "Mã hóa"
+"useIPv4ForHost" = "Sử dụng IPv4 cho máy chủ"
 "transmission" = "Truyền tải"
 "host" = "Máy chủ"
 "path" = "Đường dẫn"
@@ -645,12 +646,13 @@
 "allClients" = "Tất cả Khách hàng"
 
 "addClient" = "Thêm Khách Hàng"
-"submitDisable" = "Gửi Dưới Dạng Tắt ✅"
-"use_default" = "🏷️ Sử dụng mặc định"
+"submitDisable" = "Gửi Dưới Dạng Vô Hiệu ☑️"
+"submitEnable" = "Gửi Dưới Dạng Kích Hoạt ✅"
+"use_default" = "🏷️ Sử Dụng Mặc Định"
 "change_id" = "⚙️🔑 ID"
-"change_password" = "⚙️🔑 Mật khẩu"
+"change_password" = "⚙️🔑 Mật Khẩu"
 "change_email" = "⚙️📧 Email"
-"change_comment" = "⚙️💬 Bình luận"
+"change_comment" = "⚙️💬 Bình Luận"
 
 
 [tgbot.answers]
