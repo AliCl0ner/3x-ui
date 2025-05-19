@@ -32,7 +32,7 @@
 ## Install & Upgrade
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/AliCl0ner/3x-ui/refs/tags/v2.6.0/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/AliCl0ner/3x-ui/master/install.sh)
 ```
 
 ## Install legacy Version (we don't recommend)
