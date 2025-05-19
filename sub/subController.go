@@ -83,7 +83,7 @@ func (a *SUBController) subs(c *gin.Context) {
 		}
 
 		// Add headers
-		c.Writer.Header().Del("Subscription-Userinfo")
+		c.Writer.Header().Set("Subscription-Userinfo", "")
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
 		c.Writer.Header().Set("Profile-Title", "base64:" + base64.StdEncoding.EncodeToString([]byte(a.subTitle)))
 
@@ -117,7 +117,7 @@ func (a *SUBController) subJsons(c *gin.Context) {
 	} else {
 
 		// Add headers
-		c.Writer.Header().Del("Subscription-Userinfo")
+		c.Writer.Header().Set("Subscription-Userinfo", "")
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
 		c.Writer.Header().Set("Profile-Title", "base64:" + base64.StdEncoding.EncodeToString([]byte(a.subTitle)))
 
