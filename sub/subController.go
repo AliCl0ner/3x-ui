@@ -81,7 +81,7 @@ func (a *SUBController) subs(c *gin.Context) {
 		for _, sub := range subs {
 			result += sub + "\n"
 		}
-
+                _ = header
 		// Add headers
 		c.Writer.Header().Set("Subscription-Userinfo", "")
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
@@ -115,7 +115,7 @@ func (a *SUBController) subJsons(c *gin.Context) {
 	if err != nil || len(jsonSub) == 0 {
 		c.String(400, "Error!")
 	} else {
-
+                _ = header
 		// Add headers
 		c.Writer.Header().Set("Subscription-Userinfo", "")
 		c.Writer.Header().Set("Profile-Update-Interval", a.updateInterval)
