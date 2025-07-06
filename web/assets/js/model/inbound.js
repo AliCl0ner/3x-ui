@@ -1249,7 +1249,6 @@ class Inbound extends XrayCommonClass {
             id: clientId,
             scy: security,
             net: this.stream.network,
-            type: 'none',
             tls: tls,
         };
         const network = this.stream.network;
@@ -1284,7 +1283,7 @@ class Inbound extends XrayCommonClass {
             const xhttp = this.stream.xhttp;
             obj.path = xhttp.path;
             obj.host = xhttp.host?.length > 0 ? xhttp.host : this.getHeader(xhttp, 'host');
-            obj.mode = xhttp.mode;
+            obj.type = xhttp.mode;
         }
 
         if (tls === 'tls') {
@@ -2150,7 +2149,7 @@ Inbound.TrojanSettings.Fallback = class extends XrayCommonClass {
 Inbound.ShadowsocksSettings = class extends Inbound.Settings {
     constructor(protocol,
         method = SSMethods.BLAKE3_AES_256_GCM,
-        password = '',
+        password = RandomUtil.randomShadowsocksPassword(),
         network = 'tcp,udp',
         shadowsockses = [new Inbound.ShadowsocksSettings.Shadowsocks()],
         ivCheck = false,
@@ -2188,7 +2187,7 @@ Inbound.ShadowsocksSettings = class extends Inbound.Settings {
 Inbound.ShadowsocksSettings.Shadowsocks = class extends XrayCommonClass {
     constructor(
         method = '',
-        password = '',
+        password = RandomUtil.randomShadowsocksPassword(),
         email = RandomUtil.randomLowerAndNum(8),
         limitIp = 0,
         totalGB = 0,
